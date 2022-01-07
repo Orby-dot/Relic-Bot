@@ -140,6 +140,7 @@ def relicToDic(arrRelic):
 #Turns the txt file of the drop data into a dictionary structure 
 def dropToDic(arrDropTable):
 
+    planetName = ""
     missionName = ""
     rotation = ""
     dictDropTable = {}
@@ -148,12 +149,20 @@ def dropToDic(arrDropTable):
     for i in range(len(arrDropTable)):
         if ROTATION_CONST[0] is arrDropTable[i]:
                 
-                missionName = arrDropTable[i-1] + ")"
-                missionName = removeIndent(missionName)
+                temp = arrDropTable[i-1] + ")"
+                temp = removeIndent(temp)
+                if temp.find("/") != -1:
+
+                    temp = temp.split("/")
+                    planetName = temp[0]
+                    missionName = temp[1]
+
+                else:
+                    planetName = temp
 
                 blacklistMission = 0
                 for i in BLACKLIST_CONST:
-                    if i in missionName:
+                    if i in planetName:
                         blacklistMission = 1
 
                 rotation = ROTATION_CONST[0]
@@ -167,17 +176,20 @@ def dropToDic(arrDropTable):
 
 
         elif "Relic" in arrDropTable[i] and "Clem" not in arrDropTable[i] and blacklistMission ==0: #I have to add a clem check here cuz of a mission...I have once again been beaten by Clem
-            if dictDropTable.get(missionName) == None:
-                dictDropTable[missionName]= {}
+            if dictDropTable.get(planetName) == None:
+                dictDropTable[planetName]= {}
 
-            if dictDropTable[missionName].get(rotation) == None:
-                dictDropTable[missionName][rotation]= {}
+            if dictDropTable[planetName].get(missionName) == None:
+                dictDropTable[planetName][missionName]= {}
+
+            if dictDropTable[planetName][missionName].get(rotation) == None:
+                dictDropTable[planetName][missionName][rotation]= {}
             try:
-                dictDropTable[missionName][rotation][arrDropTable[i]] = (float(arrDropTable[i+1]))
+                dictDropTable[planetName][missionName][rotation][arrDropTable[i]] = (float(arrDropTable[i+1]))
                 i += 1
 
             except (ValueError):
-                dictDropTable[missionName][rotation][arrDropTable[i]] = (float(arrDropTable[i+2]))
+                dictDropTable[planetName][missionName][rotation][arrDropTable[i]] = (float(arrDropTable[i+2]))
                 i += 2
 
 
@@ -202,11 +214,15 @@ def otherFlip(dictInit):
     for i in dictInit:
         for j in dictInit[i]:
             for k in dictInit[i][j]:
-                if dictFlipped.get(k) == None:
-                    dictFlipped[k] = {}
-                if dictFlipped[k].get(i) == None:
-                    dictFlipped[k][i] = {}
-                dictFlipped[k][i][j]= dictInit[i][j][k]
+                for l in dictInit[i][j][k]:
+                    if dictFlipped.get(l) == None:
+                        dictFlipped[l] = {}
+                    if dictFlipped[l].get(i) == None:
+                        dictFlipped[l][i] = {}
+                    if dictFlipped[l][i].get(j) == None:
+                        dictFlipped[l][i][j] = {}
+                    
+                    dictFlipped[l][i][j][k]= dictInit[i][j][k][l]
 
 
     return dictFlipped
