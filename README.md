@@ -10,6 +10,5 @@ This list does not include bounties from PoE, Orb Vallis and the other one (I ca
 I plan on designing a bot for this and adding some probability calculation features
 
 ## Dependencies
-    - Json
-    - BeautifulSoup
-    - yaml
+- BeautifulSoup
+- yaml
