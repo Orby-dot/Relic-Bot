@@ -8,6 +8,7 @@ This list does not include bounties from PoE, Orb Vallis and the other one (I ca
 
 ## Future Plans
 I plan on designing a bot for this and adding some probability calculation features <- technically I created it, will update soon
+
 Push everything on a local db and then create a api to query (for fun)
 
 ## Dependencies
